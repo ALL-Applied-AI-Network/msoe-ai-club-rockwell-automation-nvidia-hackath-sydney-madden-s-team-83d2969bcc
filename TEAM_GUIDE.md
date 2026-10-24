@@ -56,6 +56,14 @@ flowchart LR
      $$B' = B - \Delta \hat{V}_{\text{carryover}}$$
    - When the station doses $B'$, the residual carryover in the nozzle combines with $B'$ to yield the exact intended fluid volume and color in the vial on the very first try!
 
+### 🔍 Multi-Stage In-Fill Inspection (Why Vial Fill Data Matters)
+
+Detecting fluid contamination does not have to wait until the vial is completely full—doing it at **multiple stages during the fill** yields far higher accuracy:
+
+* **Sequential Dispensing**: Station 3 dispenses components one at a time (e.g. $T_{200} \rightarrow T_{400} \rightarrow T_{100}$). The residual fluid clinging to the nozzle flushes out during the **very first component pour**.
+* **Cumulative Comparison**: Having continuous frame stills across the fill duration allows us to compare the observed color and meniscus volume at each intermediate pause against **what should have been poured up to that point in time**.
+* **High-Contrast Signal**: Inspecting right after the first component pour captures the contaminant before diluent ($T_{100}$ clear water) floods the tube, giving the vision model the clearest optical contrast to calculate the true carryover offset $\Delta V$.
+
 ---
 
 ## 🤖 3. Getting & Using Data from the Isaac Sim Digital Twin

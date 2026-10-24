@@ -49,6 +49,11 @@ py -3.12 examples/demo_batch_evaluation.py
    - Even a tiny trace (~1.5 mL) of Orange dye drastically shifts Blue into Green, masking the blue signature.
    - The model must map optical density / log-absorbance (A = -log10(I/I0)) rather than naive linear RGB to avoid wildly underestimating blue volume.
 
+5. **Multi-Stage In-Fill Sampling (Why Vial Fill Stills Matter)**:
+   - Contamination detection is not restricted to the finished vial.
+   - Because fluids dispense sequentially ($T_{200} \rightarrow T_{400} \rightarrow T_{100}$), nozzle residue flushes out during the **very first component pour**.
+   - Comparing the observed color and volume at intermediate stages against **what should have been poured up to that point in time** isolates the carryover before diluents mix in, giving a cleaner, higher-accuracy measurement.
+
 ---
 
 ## 🏗️ System Architecture & Closed-Loop Control
