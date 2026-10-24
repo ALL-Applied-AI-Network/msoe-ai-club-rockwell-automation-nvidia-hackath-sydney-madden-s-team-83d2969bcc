@@ -1,0 +1,440 @@
+[
+ {
+  "vial": 1,
+  "recipe_id": 5,
+  "type": "Triple",
+  "tanks": {
+   "100": 10,
+   "200": 10,
+   "400": 10
+  },
+  "total_ml": 30,
+  "dispense_order": "T200>T400>T100",
+  "color_purpose": "mixed - low even (swapped in)",
+  "start_s": 0,
+  "end_s": 26.894
+ },
+ {
+  "vial": 2,
+  "recipe_id": 5,
+  "type": "Triple",
+  "tanks": {
+   "100": 10,
+   "200": 10,
+   "400": 10
+  },
+  "total_ml": 30,
+  "dispense_order": "T200>T400>T100",
+  "color_purpose": "mixed - low even (swapped in)",
+  "start_s": 46.204,
+  "end_s": 73.645
+ },
+ {
+  "vial": 3,
+  "recipe_id": 5,
+  "type": "Triple",
+  "tanks": {
+   "100": 10,
+   "200": 10,
+   "400": 10
+  },
+  "total_ml": 30,
+  "dispense_order": "T200>T400>T100",
+  "color_purpose": "mixed - low even (swapped in)",
+  "start_s": 91.72,
+  "end_s": 120.503
+ },
+ {
+  "vial": 4,
+  "recipe_id": 6,
+  "type": "Pair 100+200",
+  "tanks": {
+   "100": 30,
+   "200": 10
+  },
+  "total_ml": 40,
+  "dispense_order": "T200>T100",
+  "color_purpose": "pale orange (fresh ratio)",
+  "start_s": 138.25,
+  "end_s": 161.318
+ },
+ {
+  "vial": 5,
+  "recipe_id": 6,
+  "type": "Pair 100+200",
+  "tanks": {
+   "100": 30,
+   "200": 10
+  },
+  "total_ml": 40,
+  "dispense_order": "T200>T100",
+  "color_purpose": "pale orange (fresh ratio)",
+  "start_s": 179.096,
+  "end_s": 203.085
+ },
+ {
+  "vial": 6,
+  "recipe_id": 6,
+  "type": "Pair 100+200",
+  "tanks": {
+   "100": 30,
+   "200": 10
+  },
+  "total_ml": 40,
+  "dispense_order": "T200>T100",
+  "color_purpose": "pale orange (fresh ratio)",
+  "start_s": 221.015,
+  "end_s": 246.39
+ },
+ {
+  "vial": 7,
+  "recipe_id": 7,
+  "type": "Pair 100+400",
+  "tanks": {
+   "100": 20,
+   "400": 50
+  },
+  "total_ml": 70,
+  "dispense_order": "T400>T100",
+  "color_purpose": "pale blue (fresh ratio)",
+  "start_s": 284.669,
+  "end_s": 308.023
+ },
+ {
+  "vial": 8,
+  "recipe_id": 7,
+  "type": "Pair 100+400",
+  "tanks": {
+   "100": 20,
+   "400": 50
+  },
+  "total_ml": 70,
+  "dispense_order": "T400>T100",
+  "color_purpose": "pale blue (fresh ratio)",
+  "start_s": 336.839,
+  "end_s": 360.979
+ },
+ {
+  "vial": 9,
+  "recipe_id": 7,
+  "type": "Pair 100+400",
+  "tanks": {
+   "100": 20,
+   "400": 50
+  },
+  "total_ml": 70,
+  "dispense_order": "T400>T100",
+  "color_purpose": "pale blue (fresh ratio)",
+  "start_s": 391.343,
+  "end_s": 414.236
+ },
+ {
+  "vial": 10,
+  "recipe_id": 8,
+  "type": "Triple",
+  "tanks": {
+   "100": 20,
+   "200": 20,
+   "400": 20
+  },
+  "total_ml": 60,
+  "dispense_order": "T200>T400>T100",
+  "color_purpose": "even (links to Cfg D)",
+  "start_s": 434.761,
+  "end_s": 472.752
+ },
+ {
+  "vial": 11,
+  "recipe_id": 8,
+  "type": "Triple",
+  "tanks": {
+   "100": 20,
+   "200": 20,
+   "400": 20
+  },
+  "total_ml": 60,
+  "dispense_order": "T200>T400>T100",
+  "color_purpose": "even (links to Cfg D)",
+  "start_s": 491.795,
+  "end_s": 528.275
+ },
+ {
+  "vial": 12,
+  "recipe_id": 8,
+  "type": "Triple",
+  "tanks": {
+   "100": 20,
+   "200": 20,
+   "400": 20
+  },
+  "total_ml": 60,
+  "dispense_order": "T200>T400>T100",
+  "color_purpose": "even (links to Cfg D)",
+  "start_s": 548.774,
+  "end_s": 586.539
+ },
+ {
+  "vial": 13,
+  "recipe_id": 9,
+  "type": "Triple",
+  "tanks": {
+   "100": 10,
+   "200": 35,
+   "400": 35
+  },
+  "total_ml": 80,
+  "dispense_order": "T200>T400>T100",
+  "color_purpose": "dark saturated (low clear)",
+  "start_s": 609.721,
+  "end_s": 656.353
+ },
+ {
+  "vial": 14,
+  "recipe_id": 9,
+  "type": "Triple",
+  "tanks": {
+   "100": 10,
+   "200": 35,
+   "400": 35
+  },
+  "total_ml": 80,
+  "dispense_order": "T200>T400>T100",
+  "color_purpose": "dark saturated (low clear)",
+  "start_s": 679.525,
+  "end_s": 725.968
+ },
+ {
+  "vial": 15,
+  "recipe_id": 9,
+  "type": "Triple",
+  "tanks": {
+   "100": 10,
+   "200": 35,
+   "400": 35
+  },
+  "total_ml": 80,
+  "dispense_order": "T200>T400>T100",
+  "color_purpose": "dark saturated (low clear)",
+  "start_s": 749.5,
+  "end_s": 797.504
+ },
+ {
+  "vial": 16,
+  "recipe_id": 10,
+  "type": "Triple",
+  "tanks": {
+   "100": 45,
+   "200": 15,
+   "400": 15
+  },
+  "total_ml": 75,
+  "dispense_order": "T200>T400>T100",
+  "color_purpose": "pale wash (high clear)",
+  "start_s": 817.671,
+  "end_s": 855.988
+ },
+ {
+  "vial": 17,
+  "recipe_id": 10,
+  "type": "Triple",
+  "tanks": {
+   "100": 45,
+   "200": 15,
+   "400": 15
+  },
+  "total_ml": 75,
+  "dispense_order": "T200>T400>T100",
+  "color_purpose": "pale wash (high clear)",
+  "start_s": 875.566,
+  "end_s": 913.594
+ },
+ {
+  "vial": 18,
+  "recipe_id": 10,
+  "type": "Triple",
+  "tanks": {
+   "100": 45,
+   "200": 15,
+   "400": 15
+  },
+  "total_ml": 75,
+  "dispense_order": "T200>T400>T100",
+  "color_purpose": "pale wash (high clear)",
+  "start_s": 932.431,
+  "end_s": 969.911
+ },
+ {
+  "vial": 19,
+  "recipe_id": 11,
+  "type": "Triple",
+  "tanks": {
+   "100": 10,
+   "200": 10,
+   "400": 50
+  },
+  "total_ml": 70,
+  "dispense_order": "T200>T400>T100",
+  "color_purpose": "",
+  "start_s": 989.484,
+  "end_s": 1030.938
+ },
+ {
+  "vial": 20,
+  "recipe_id": 11,
+  "type": "Triple",
+  "tanks": {
+   "100": 10,
+   "200": 10,
+   "400": 50
+  },
+  "total_ml": 70,
+  "dispense_order": "T200>T400>T100",
+  "color_purpose": "",
+  "start_s": 1050.381,
+  "end_s": 1092.239
+ },
+ {
+  "vial": 21,
+  "recipe_id": 11,
+  "type": "Triple",
+  "tanks": {
+   "100": 10,
+   "200": 10,
+   "400": 50
+  },
+  "total_ml": 70,
+  "dispense_order": "T200>T400>T100",
+  "color_purpose": "",
+  "start_s": 1110.856,
+  "end_s": 1153.286
+ },
+ {
+  "vial": 22,
+  "recipe_id": 12,
+  "type": "Triple",
+  "tanks": {
+   "100": 10,
+   "200": 50,
+   "400": 10
+  },
+  "total_ml": 70,
+  "dispense_order": "T200>T400>T100",
+  "color_purpose": "",
+  "start_s": 1179.569,
+  "end_s": 1220.602
+ },
+ {
+  "vial": 23,
+  "recipe_id": 12,
+  "type": "Triple",
+  "tanks": {
+   "100": 10,
+   "200": 50,
+   "400": 10
+  },
+  "total_ml": 70,
+  "dispense_order": "T200>T400>T100",
+  "color_purpose": "",
+  "start_s": 1246.409,
+  "end_s": 1289.899
+ },
+ {
+  "vial": 24,
+  "recipe_id": 12,
+  "type": "Triple",
+  "tanks": {
+   "100": 10,
+   "200": 50,
+   "400": 10
+  },
+  "total_ml": 70,
+  "dispense_order": "T200>T400>T100",
+  "color_purpose": "",
+  "start_s": 1316.497,
+  "end_s": 1359.865
+ },
+ {
+  "vial": 25,
+  "recipe_id": 13,
+  "type": "Pair 200+400",
+  "tanks": {
+   "200": 50,
+   "400": 20
+  },
+  "total_ml": 70,
+  "dispense_order": "T200>T400",
+  "color_purpose": "",
+  "start_s": 1384.465,
+  "end_s": 1423.66
+ },
+ {
+  "vial": 26,
+  "recipe_id": 13,
+  "type": "Pair 200+400",
+  "tanks": {
+   "200": 50,
+   "400": 20
+  },
+  "total_ml": 70,
+  "dispense_order": "T200>T400",
+  "color_purpose": "",
+  "start_s": 1451.327,
+  "end_s": 1487.312
+ },
+ {
+  "vial": 27,
+  "recipe_id": 13,
+  "type": "Pair 200+400",
+  "tanks": {
+   "200": 50,
+   "400": 20
+  },
+  "total_ml": 70,
+  "dispense_order": "T200>T400",
+  "color_purpose": "",
+  "start_s": 1514.322,
+  "end_s": 1551.569
+ },
+ {
+  "vial": 28,
+  "recipe_id": 14,
+  "type": "Pair 100+400",
+  "tanks": {
+   "100": 60,
+   "400": 10
+  },
+  "total_ml": 70,
+  "dispense_order": "T400>T100",
+  "color_purpose": "",
+  "start_s": 1579.512,
+  "end_s": 1601.142
+ },
+ {
+  "vial": 29,
+  "recipe_id": 14,
+  "type": "Pair 100+400",
+  "tanks": {
+   "100": 60,
+   "400": 10
+  },
+  "total_ml": 70,
+  "dispense_order": "T400>T100",
+  "color_purpose": "",
+  "start_s": 1625.047,
+  "end_s": 1646.633
+ },
+ {
+  "vial": 30,
+  "recipe_id": 14,
+  "type": "Pair 100+400",
+  "tanks": {
+   "100": 60,
+   "400": 10
+  },
+  "total_ml": 70,
+  "dispense_order": "T400>T100",
+  "color_purpose": "",
+  "start_s": 1671.265,
+  "end_s": 1693.804
+ }
+]
