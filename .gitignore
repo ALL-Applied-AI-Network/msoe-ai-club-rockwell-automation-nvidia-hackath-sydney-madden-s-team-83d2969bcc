@@ -1,5 +1,5 @@
-personal_data/
-output/
+.venv/
 __pycache__/
-*.pyc
-*.pkl
+*.py[cod]
+.streamlit/secrets.toml
+videos/
