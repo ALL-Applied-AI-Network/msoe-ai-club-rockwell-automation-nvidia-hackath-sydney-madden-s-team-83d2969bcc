@@ -1,0 +1,14 @@
+{
+  "new_plans": 200,
+  "new_images": 2400,
+  "normalized_plan_overlap": 0,
+  "scores": {
+    "model1_prefix": 0.02227427692275295,
+    "persistence": 0.127493505519042,
+    "original_model2": 0.08446356440097669,
+    "noise_robust_model2": 0.06393899207385968
+  },
+  "models_retrained": false,
+  "same_procedural_renderer_family": true,
+  "real_factory_accuracy_validated": false
+}
