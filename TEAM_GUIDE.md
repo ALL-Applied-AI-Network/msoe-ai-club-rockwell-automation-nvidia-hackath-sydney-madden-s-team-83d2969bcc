@@ -110,35 +110,34 @@ Physical line runs are limited and expensive. The hackathon's core guidance is: 
 
 ---
 
-## 👥 5. Subteam Roles & Next Steps
+## 🧩 5. Core System Modules & Functional Responsibilities
 
-### Subteam A: Computer Vision & Fill Tracking (2 People)
-* **Core Files**: `src/vision/volume_estimator.py`, `src/vision/roi.py`
-* **Key Tasks**:
+### Module 1: Computer Vision & Fill Tracking
+* **Core Files**: `src/vision/volume_estimator.py`, `tagger/volume_estimator.py`, `src/vision/roi.py`
+* **Key Capabilities**:
   1. **Camera Angle & Meniscus Geometry**: The camera is angled downwards (~15–20°), meaning the meniscus projects as a curved ellipse, and perspective foreshortening makes pixel-to-mL scaling non-linear.
-  2. **Polynomial Calibration**: Replace the linear slope in `volume_estimator.py` with a 2nd-degree polynomial calibration curve ($\text{Volume} = a \cdot y^2 + b \cdot y + c$) fit against known ground-truth fills.
-  3. **Multi-Stage Pour Tracking**: Detect the pause between the first and second component pour (where ~90% of carryover enters before diluents mix in).
+  2. **Polynomial Calibration**: Calibrated 2nd-degree polynomial curve ($V(px) = a \cdot px^2 + b \cdot px + c$) fit against physical ground truth fills, accounting for the 23px carriage clamp obstruction.
+  3. **Multi-Stage Pour Tracking**: Detect the pause after each component pour (where ~90% of carryover enters before diluents mix in).
 * **Test Command**: `py -3.12 -m src.vision.volume_estimator`
 
 ---
 
-### Subteam B: Colorimetry & Feedforward Spillover Model (2 People)
-* **Core Files**: `src/vision/color_extractor.py`, `src/models/composition_model.py`
-* **Key Tasks**:
-  1. **Optical Absorbance (Beer-Lambert)**: Dyes combine subtractively in transmitted light. Convert pixel intensities to optical absorbance ($A = -\log_{10}(I/I_0)$), where dye contributions add linearly.
-  2. **Offset Calculation**: Calculate the physical offset $\Delta V$ of excess fluid that entered the vial.
-  3. **Feedforward Spillover Predictor ($B'$)**: Train a model on Isaac Sim digital twin trials to predict $\Delta \hat{V}$ *before* the pour, outputting the modified recipe $B' = B - \Delta \hat{V}$ for the first vial.
+### Module 2: Colorimetry & Inverse Recipe Inference
+* **Core Files**: `src/vision/color_extractor.py`, `src/models/composition_model.py`, `ai/inference.py`
+* **Key Capabilities**:
+  1. **Optical Absorbance (Beer-Lambert)**: Dyes combine subtractively in transmitted light. Maps optical density and color coordinates to physical fluid components ($T_{100}, T_{200}, T_{400}$).
+  2. **Offset Calculation**: Calculates the physical volume offset $\Delta V$ of excess fluid that entered the vial.
+  3. **Feedforward Spillover Predictor ($B'$)**: Uses transition modeling to predict carryover $\Delta \hat{V}$ *before* the pour, generating modified recipe $B' = B - \Delta \hat{V}$ for the first vial.
 * **Test Command**: `py -3.12 -m src.models.composition_model`
 
 ---
 
-### Subteam C: Digital Twin Data, Diagnostics & Video (3 People)
-* **Core Files**: `src/diagnostics/root_cause.py`, `src/data/auto_labeler.py`, `examples/`
-* **Key Tasks**:
-  1. **Digital Twin Data Generation**: Run the Isaac Sim script to generate synthetic transition trials with varied recipes and lighting.
-  2. **Auto-Label Videos 1–4**: Update `src/data/auto_labeler.py` using temporal frame differencing in `NOZZLE_ROI` to auto-generate labels for unlabelled Videos 1–4.
-  3. **Integrate `tank_level` Camera**: Check supply tank levels to distinguish empty supply barrels from nozzle carryover faults.
-  4. **5-Minute Presentation Video**: Script and edit the final video showcasing the problem, vision pipeline, digital twin synthetic data, and the live $B'$ feedforward demo.
+### Module 3: Diagnostics & Automated Video Tagging
+* **Core Files**: `src/diagnostics/root_cause.py`, `tagger/auto_tagger.py`, `src/data/auto_tagger.py`
+* **Key Capabilities**:
+  1. **Automated Video Tagging**: High-accuracy zero-lookup stream detection, conveyor optical flow tracking, and cycle segmentation across all video recordings.
+  2. **Root-Cause Diagnostic Engine**: Cross-references detected fluid composition with preceding recipe history to diagnose Carryover Defect vs In-Spec Pass vs Unknown Error.
+  3. **Supply Tank & Presentation Assets**: Integrates line tracking and generates structured reporting for the operator dashboard.
 * **Test Command**: `py -3.12 examples/demo_batch_evaluation.py`
 
 ---
