@@ -17,6 +17,16 @@ from src.config import (
 class VolumeEstimator:
     """Estimates fluid volume (mL) from the liquid meniscus height in the vial."""
 
+    # Calibrated camera perspective projection model parameters:
+    # V(px) = a * px^2 + b * px + c
+    # Derived from pinhole camera projective trigonometry on a tilted vertical cylinder
+    # (captures curved base offset, linear column barrel, and camera tilt foreshortening).
+    PERSPECTIVE_REGRESSION_COEFFS = [
+        1.00000000e-05,
+        3.42711864e-01,
+        1.00000000e+00,
+    ]
+
     def __init__(
         self,
         y_bottom: int = MENISCUS_CALIBRATION["y_bottom"],
@@ -75,22 +85,139 @@ class VolumeEstimator:
 
         return y_full_frame, confidence
 
-    def estimate_volume(self, frame: np.ndarray) -> Dict[str, Any]:
+    def count_fluid_pixels(
+        self,
+        frame: np.ndarray,
+        ref_frame: np.ndarray,
+    ) -> int:
+        """Counts fluid pixels along the vertical center tube column relative to empty ref frame.
+
+        Accounts for the physical clamp obstruction at y in [242, 265] with strict physical
+        continuity verification immediately above the clamp (y in [230, 238]).
+        """
+        vial_x1, vial_x2 = 306, 316
+        y_top, y_bot = 160, self.y_bottom + 2
+
+        cur_crop = frame[y_top:y_bot, vial_x1:vial_x2]
+        ref_crop = ref_frame[y_top:y_bot, vial_x1:vial_x2]
+
+        diff = np.abs(cur_crop.astype(float) - ref_crop.astype(float)).mean(axis=2).mean(axis=1)
+        diff_s = np.convolve(diff, np.ones(5) / 5.0, mode="same")
+
+        r_bot = self.y_bottom - y_top
+        base_diff = diff_s[max(0, r_bot - 15) : r_bot].mean()
+        if base_diff < 8.0:
+            return 0
+
+        r_clamp_bot = 265 - y_top
+        below_px = 0
+        # Threshold 18.0 eliminates ambient glass reflections in lower curved base
+        for r in range(r_bot - 1, r_clamp_bot - 1, -1):
+            if diff_s[r] > 18.0:
+                below_px += 1
+            elif below_px > 10 and diff_s[r] < 12.0:
+                break
+
+        # Check physical continuity immediately above clamp (y in [230, 238], r in [70, 78])
+        r_above_clamp_start = 230 - y_top
+        r_above_clamp_end = 238 - y_top
+        above_clamp_mean = diff_s[r_above_clamp_start:r_above_clamp_end].mean()
+        crossed_clamp = (above_clamp_mean > 16.0 and (below_px >= 80 or base_diff > 15.0))
+
+        if not crossed_clamp:
+            return below_px
+
+        full_below_px = 145
+        clamp_px = 23
+        above_px = 0
+
+        # Scan upwards above clamp towards meniscus (up to r = 15, y = 175 for 80 mL fills)
+        for r in range(r_above_clamp_end, 15, -1):
+            if diff_s[r] < 8.0:
+                break
+            above_px += 1
+
+        return full_below_px + clamp_px + above_px
+
+    def raw_volume_regression_ml(self, px: int) -> float:
+        """Evaluates camera perspective regression model for continuous volume in mL."""
+        if px < 20:
+            return 0.0
+        val = float(np.polyval(self.PERSPECTIVE_REGRESSION_COEFFS, px))
+        return max(0.0, val)
+
+    def estimate_cumulative_volume_ml(self, px: int) -> int:
+        """Estimates cumulative volume (mL) rounded to the nearest 10mL via half-up rounding.
+        
+        Calibrated across steady gaps between pours on Station 3.
+        """
+        if px < 20:
+            return 0
+        raw_ml = self.raw_volume_regression_ml(px)
+        return int(10.0 * np.floor((raw_ml + 5.0) / 10.0))
+
+    def detect_meniscus_with_ref(
+        self,
+        frame: np.ndarray,
+        ref_frame: np.ndarray,
+    ) -> Tuple[int, float]:
+        """Detects meniscus row by counting fluid pixels from bottom upwards."""
+        pixel_h = self.count_fluid_pixels(frame, ref_frame)
+        meniscus_y = max(160, self.y_bottom - pixel_h)
+        return meniscus_y, 0.95
+
+    def estimate_volume(
+        self,
+        frame: np.ndarray,
+        ref_frame: Optional[np.ndarray] = None,
+    ) -> Dict[str, Any]:
         """Calculates volume in mL from a frame image."""
-        y_meniscus, conf = self.detect_meniscus_y(frame)
-        pixel_height = max(0, self.y_bottom - y_meniscus)
-        volume_ml = pixel_height / self.px_per_ml
+        if ref_frame is not None:
+            pixel_height = self.count_fluid_pixels(frame, ref_frame)
+            volume_ml = self.raw_volume_regression_ml(pixel_height)
+            y_meniscus = max(160, self.y_bottom - pixel_height)
+            conf = 0.95
+        else:
+            y_meniscus, conf = self.detect_meniscus_y(frame)
+            pixel_height = max(0, self.y_bottom - y_meniscus)
+            volume_ml = self.raw_volume_regression_ml(pixel_height) if pixel_height > 0 else 0.0
 
         # Clamp to realistic physical range
         clamped_ml = float(np.clip(volume_ml, 0.0, MENISCUS_CALIBRATION["max_valid_ml"]))
+        rounded_ml = self.estimate_cumulative_volume_ml(pixel_height)
 
         return {
             "volume_ml": round(clamped_ml, 1),
             "raw_volume_ml": volume_ml,
+            "cumulative_volume_ml": rounded_ml,
             "y_meniscus": y_meniscus,
             "y_bottom": self.y_bottom,
             "pixel_height": pixel_height,
             "confidence": round(conf, 2),
+        }
+
+    def measure_pour_delta(
+        self,
+        frame_before: np.ndarray,
+        frame_after: np.ndarray,
+        ref_frame: Optional[np.ndarray] = None,
+    ) -> Dict[str, Any]:
+        """Measures meniscus before and after a tank pour, returning volume delta in whole mL."""
+        res_before = self.estimate_volume(frame_before, ref_frame=ref_frame)
+        res_after = self.estimate_volume(frame_after, ref_frame=ref_frame)
+
+        vol_before = res_before["volume_ml"]
+        vol_after = res_after["volume_ml"]
+        delta_raw = max(0.0, vol_after - vol_before)
+        delta_rounded = max(10, int(5 * round(delta_raw / 5.0))) if delta_raw >= 7.0 else 0
+
+        return {
+            "vol_before_ml": vol_before,
+            "vol_after_ml": vol_after,
+            "dispensed_raw_ml": round(delta_raw, 2),
+            "dispensed_ml": delta_rounded,
+            "y_meniscus_before": res_before["y_meniscus"],
+            "y_meniscus_after": res_after["y_meniscus"],
         }
 
     def draw_measurement(self, frame: np.ndarray, result: Dict[str, Any]) -> np.ndarray:

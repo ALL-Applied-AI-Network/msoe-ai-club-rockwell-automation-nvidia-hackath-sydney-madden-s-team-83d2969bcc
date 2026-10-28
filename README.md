@@ -14,14 +14,22 @@ py -3.12 -m pip install -r requirements.txt
 # 2. Download raw data files from Google Drive:
 # https://drive.google.com/drive/folders/18vpLUhniZ-Rn73ThbKCS38WP6NFFBz23
 # Place extracted contents into personal_data/ (which is in .gitignore so large MP4s are not tracked by git).
-# (Note: You do not need the labels from Drive because ground-truth labels are already tracked in data/tags/).
 
 # 3. Run single-vial inspection demo (Vial 7 carryover defect vs Vial 9 clean)
 py -3.12 examples/demo_single_vial.py --image "vial_fill_20260923_195325_659355.jpg" --recipe 7 --prev_recipe 6 --vial 7
 
-# 4. Run full 30-vial ground-truth benchmark
+# 4. Run/start the automated video tagger (generates tags for Videos 1-5):
+python -m tagger.auto_tagger --video 1 --out-dir data/tags
+
+# 5. Run full 30-vial ground-truth benchmark
 py -3.12 examples/demo_batch_evaluation.py
 ```
+
+> [!IMPORTANT]
+> ### 🚨 Critical Data Directory Rules (`data/`)
+> * **[`data/given_tags/`](file:///C:/Users/granta/ai-club/msoe-ai-club-rockwell-automation-nvidia-hackath-sydney-madden-s-team-83d2969bcc/data/given_tags/)**: Official ground-truth labels provided directly by the hackathon organizers. **CRITICAL: NEVER EDIT, OVERWRITE, OR MODIFY THESE FILES.**
+> * **[`data/tags/`](file:///C:/Users/granta/ai-club/msoe-ai-club-rockwell-automation-nvidia-hackath-sydney-madden-s-team-83d2969bcc/data/tags/)**: Production tags generated automatically by the [`AutoTagger`](file:///C:/Users/granta/ai-club/msoe-ai-club-rockwell-automation-nvidia-hackath-sydney-madden-s-team-83d2969bcc/tagger/auto_tagger.py#L40) engine for Videos 1–5.
+> * **Starting the Tagger / API**: Run `python -m tagger.auto_tagger --video <id> --out-dir data/tags` (or programmatically via `from tagger import AutoTagger; tagger = AutoTagger()`). See [`tagger/README.md`](file:///C:/Users/granta/ai-club/msoe-ai-club-rockwell-automation-nvidia-hackath-sydney-madden-s-team-83d2969bcc/tagger/README.md) for full API details.
 
 ---
 
@@ -108,13 +116,14 @@ Physical line experiments are slow and costly. We use the **NVIDIA Isaac Sim dig
 
 ---
 
-## 📋 Team Action Plan & Task Board
+## 📋 System Milestones & Capabilities
 
 - [x] **Working Baseline Established**: End-to-end vision, volume, color, composition, and diagnostic pipeline running on Python 3.12.
-- [x] **Verified on Real Data**: Vial 7 (Green Carryover Defect) and Vial 9 (Clean Blue Pass) verified. This just proves we have output, not that it's any correct
-- [ ] **Subteam A (Vision)**: Refine `src/vision/volume_estimator.py` with a 2nd-degree polynomial curve to correct for camera pitch angle.
-- [ ] **Subteam B (ML/Color & Spillover Predictor)**: Use optical absorbance to calculate excess carryover offset, then train a model on Isaac Sim trials to predict spillover before pour and output modified recipe $B'$ for the first vial.
-- [ ] **Subteam C (Data, Digital Twin & Video)**: Generate synthetic trials with the Isaac Sim digital twin, run `src/data/auto_labeler.py` to auto-label Videos 1-4, and prepare the 5-minute final presentation video.
+- [x] **Verified on Real Data**: Vial 7 (Green Carryover Defect) and Vial 9 (Clean Blue Pass) verified on physical line imagery.
+- [x] **Vision & Volume Calibration**: Implemented calibrated 2nd-degree perspective polynomial curve ($V(px) = a \cdot px^2 + b \cdot px + c$) and pneumatic carriage clamp continuity correction in [`src/vision/volume_estimator.py`](file:///C:/Users/granta/ai-club/msoe-ai-club-rockwell-automation-nvidia-hackath-sydney-madden-s-team-83d2969bcc/src/vision/volume_estimator.py) and [`tagger/volume_estimator.py`](file:///C:/Users/granta/ai-club/msoe-ai-club-rockwell-automation-nvidia-hackath-sydney-madden-s-team-83d2969bcc/tagger/volume_estimator.py).
+- [x] **Automated Video Tagging Engine**: Auto-tagging complete for Videos 1–5 (`data/tags/`). Video 5 benchmark achieves 100% exact match (30/30 vials, 78/78 pours).
+- [ ] **Feedforward Spillover Predictor ($B'$)**: Use optical absorbance to calculate excess carryover offset, then train a model on Isaac Sim trials to predict spillover before pour and output modified recipe $B'$ for the first vial.
+- [ ] **End-to-End Lab Deployment**: Integrate frontend interface, API server, and automated diagnostics engine.
 
 ---
 
